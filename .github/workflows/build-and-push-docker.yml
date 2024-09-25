@@ -55,6 +55,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
+          dockerfile: ./Dockerfile
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
