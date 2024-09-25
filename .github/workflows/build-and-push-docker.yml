@@ -15,6 +15,26 @@ jobs:
       packages: write
 
     steps:
+          - name: Checkout caller repository
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.ref }}
+
+      - name: Download Dockerfile from reusable workflow repository
+        run: |
+          # Set the repository and path to the Dockerfile
+          WORKFLOW_REPO="gradinamax-software/github-actions-templates"
+          DOCKERFILE_PATH=".github/docker/Dockerfile"
+
+          git clone --no-checkout https://github.com/$WORKFLOW_REPO.git workflow-repo
+          cd workflow-repo
+          git checkout origin/main -- $DOCKERFILE_PATH
+          cd ..
+
+          # Copy the Dockerfile to the current directory
+          cp workflow-repo/$DOCKERFILE_PATH ./Dockerfile
+
       - name: Checkout repository
         uses: actions/checkout@v3
 
