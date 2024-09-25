@@ -1,5 +1,8 @@
 name: Build and Push Docker Images
 
+on:
+  workflow_call:
+
 env:
   REGISTRY: ghcr.io  # Hardcoded registry
   IMAGE_NAME: ${{ github.repository }}
