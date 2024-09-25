@@ -1,14 +1,7 @@
 name: Build and Push Docker Images
 
-on:
-  workflow_call:
-    secrets:
-      GITHUB_TOKEN:
-        description: 'GitHub token for authentication'
-        required: true
-
 env:
-  REGISTRY: ghcr.io # Hardcoded registry
+  REGISTRY: ghcr.io  # Hardcoded registry
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
