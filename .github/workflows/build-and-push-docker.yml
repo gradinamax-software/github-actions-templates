@@ -15,12 +15,14 @@ jobs:
       packages: write
 
     steps:
+      # Checkout the caller repository
       - name: Checkout caller repository
         uses: actions/checkout@v3
         with:
           repository: ${{ github.repository }}
           ref: ${{ github.ref }}
 
+      # Download Dockerfile from reusable workflow repository
       - name: Download Dockerfile from reusable workflow repository
         run: |
           # Set the repository and path to the Dockerfile
@@ -35,9 +37,11 @@ jobs:
           # Copy the Dockerfile to the current directory
           cp workflow-repo/$DOCKERFILE_PATH ./Dockerfile
 
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      # Debug step: List files in working directory to verify Dockerfile is present
+      - name: List files in working directory
+        run: ls -la
 
+      # Log in to the Container registry
       - name: Log in to the Container registry
         uses: docker/login-action@v2
         with:
@@ -45,17 +49,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # Extract metadata for Docker
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
+      # Build and push Docker image
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
-          file: ./Dockerfile
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
