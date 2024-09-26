@@ -19,5 +19,8 @@ RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath
 # Install Redis extension with igbinary support via PECL
 RUN pecl install redis && pecl install igbinary && docker-php-ext-enable redis igbinary
 
+# Copy files
+COPY . .
+
 # Start Laravel's built-in development server
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=80"]
