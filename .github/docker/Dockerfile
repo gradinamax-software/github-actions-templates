@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions required by Laravel
-RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath
+RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath redis
 
 # Start Laravel's built-in development server
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=80"]
