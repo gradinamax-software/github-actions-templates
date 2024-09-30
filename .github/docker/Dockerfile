@@ -20,6 +20,9 @@ RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath
 # Install Redis extension with igbinary support via PECL
 RUN pecl install redis && pecl install igbinary && docker-php-ext-enable redis igbinary
 
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
 # Copy files
 COPY . .
 
