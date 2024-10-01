@@ -22,20 +22,25 @@ jobs:
           repository: ${{ github.repository }}
           ref: ${{ github.ref }}
 
-      # Download Dockerfile from reusable workflow repository
-      - name: Download Dockerfile from reusable workflow repository
+      # Download Dockerfile and Nginx configuration from reusable workflow repository
+      - name: Download Dockerfile and Nginx configuration from reusable workflow repository
         run: |
-          # Set the repository and path to the Dockerfile
+          # Set the repository and paths
           WORKFLOW_REPO="gradinamax-software/github-actions-templates"
           DOCKERFILE_PATH=".github/docker/Dockerfile"
+          NGINX_CONF_PATH=".github/docker/nginx.conf"
+          DEFAULT_CONF_PATH=".github/docker/default.conf"
 
+          # Clone repository and fetch specific files
           git clone --no-checkout https://github.com/$WORKFLOW_REPO.git workflow-repo
           cd workflow-repo
-          git checkout origin/main -- $DOCKERFILE_PATH
+          git checkout origin/main -- $DOCKERFILE_PATH $NGINX_CONF_PATH $DEFAULT_CONF_PATH
           cd ..
 
-          # Copy the Dockerfile to the current directory
+          # Copy the Dockerfile and Nginx configurations to the current directory
           cp workflow-repo/$DOCKERFILE_PATH ./Dockerfile
+          cp workflow-repo/$NGINX_CONF_PATH ./nginx.conf
+          cp workflow-repo/$DEFAULT_CONF_PATH ./default.conf
 
       # Debug step: List files in working directory to verify Dockerfile is present
       - name: List files in working directory
