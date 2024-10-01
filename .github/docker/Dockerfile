@@ -1,5 +1,5 @@
-# Use the official PHP 8.2 CLI image
-FROM php:8.2-cli
+# Use the official PHP 8.2 FPM image
+FROM php:8.2-fpm
 
 # Set the working directory
 WORKDIR /var/www/bekker
@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libonig-dev \
     libxml2-dev \
+    nginx \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions required by Laravel
@@ -31,8 +32,15 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | b
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy files
+# Copy project files
 COPY . .
 
-# Start Laravel's built-in development server
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=80"]
+# Copy Nginx configuration file
+COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx and PHP-FPM
+CMD ["bash", "-c", "service nginx start && php-fpm"]
