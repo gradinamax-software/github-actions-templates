@@ -22,7 +22,7 @@ RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath
 RUN pecl install redis && pecl install igbinary && docker-php-ext-enable redis igbinary
 
 # Install nvm, Node.js, and Yarn
-ENV NVM_DIR /root/.nvm
+ENV NVM_DIR=/root/.nvm
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
     && nvm install --lts \
